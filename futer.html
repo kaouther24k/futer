@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Future Message To Myself</title>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f4f4;
+            padding: 30px;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0 0 10px gray;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        button {
+            background: #333;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Future Message To Myself 💌</h2>
+        <form id="futureForm"><label>First Name</label>
+            <input type="text" id="fname" required>
+
+            <label>Last Name</label>
+            <input type="text" id="lname" required>
+
+            <label>Email</label>
+            <input type="email" id="email" required>
+
+            <label>Your Message</label>
+
+            <textarea id="message" required></textarea><label>Send Date & Time</label>
+            <input type="datetime-local" id="time" required>
+
+            <button type="submit">Schedule Message</button>
+
+        </form>
+        <p id="status"></p>
+    </div>
+    <script>
+
+        // سنضع key هنا لاحقا
+        emailjs.init("f6yk1qku1g5USwl_C");
+
+        document.getElementById("futureForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            let sendTime = new Date(document.getElementById("time").value);
+            let now = new Date();
+            let delay = sendTime - now;
+
+            if (delay <= 0) {
+                alert("Choose future time!");
+                return;
+            }
+
+            document.getElementById("status").innerText =
+                "Message scheduled... keep page open";
+
+            setTimeout(function () {
+
+                emailjs.send("service_fajnu3o", "template_qvtsft9", {
+                    name: document.getElementById("fname").value + " " + document.getElementById("lname").value,
+                    email: document.getElementById("email").value,
+                    message: document.getElementById("message").value
+                })
+                    .then(function () {
+                        document.getElementById("status").innerText =
+                            "Message sent!";
+                    });
+
+            }, delay);
+
+        });
+    </script>
+</body>
+
+</html>
